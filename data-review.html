@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bird Dropping Soiling on PV Panels — Literature Data Review</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f1117;
+      --surface: #1a1d27;
+      --surface2: #22263a;
+      --border: #2e3352;
+      --text: #e8eaf0;
+      --muted: #8b90a8;
+      --accent: #4f8ef7;
+      --accent2: #f7a24f;
+      --red: #f75f4f;
+      --green: #4ff79a;
+      --yellow: #f7e04f;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    header {
+      background: linear-gradient(135deg, #1a1d27 0%, #12172b 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 2.5rem 1.5rem 2rem;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: clamp(1.4rem, 4vw, 2.2rem);
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.02em;
+    }
+
+    header h1 span { color: var(--accent); }
+
+    header p {
+      margin-top: 0.6rem;
+      color: var(--muted);
+      font-size: 0.9rem;
+      max-width: 680px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .badge {
+      display: inline-block;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.75rem;
+      padding: 0.2rem 0.7rem;
+      border-radius: 99px;
+      margin-top: 0.8rem;
+    }
+
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2rem 1.2rem 4rem;
+    }
+
+    .section-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.3rem;
+      margin-top: 3rem;
+    }
+
+    .section-subtitle {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 0.4rem;
+    }
+
+    .section-note {
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin-bottom: 1.5rem;
+      max-width: 820px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.2rem 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+    }
+
+    .stat-card.blue::before { background: var(--accent); }
+    .stat-card.orange::before { background: var(--accent2); }
+    .stat-card.red::before { background: var(--red); }
+    .stat-card.green::before { background: var(--green); }
+
+    .stat-label {
+      font-size: 0.78rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 0.3rem;
+    }
+
+    .stat-value {
+      font-size: 2.4rem;
+      font-weight: 800;
+      line-height: 1;
+      margin-bottom: 0.3rem;
+    }
+
+    .stat-card.blue .stat-value { color: var(--accent); }
+    .stat-card.orange .stat-value { color: var(--accent2); }
+    .stat-card.red .stat-value { color: var(--red); }
+    .stat-card.green .stat-value { color: var(--green); }
+
+    .stat-desc {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .chart-wrap {
+      position: relative;
+      height: 340px;
+    }
+
+    .chart-wrap.tall { height: 440px; }
+    .chart-wrap.short { height: 240px; }
+
+    @media (max-width: 600px) {
+      .chart-wrap { height: 280px; }
+      .chart-wrap.tall { height: 380px; }
+    }
+
+    /* Data table */
+    .table-wrap {
+      overflow-x: auto;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.82rem;
+      background: var(--surface);
+    }
+
+    thead tr {
+      background: var(--surface2);
+    }
+
+    th {
+      text-align: left;
+      padding: 0.75rem 1rem;
+      color: var(--muted);
+      font-weight: 600;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      white-space: nowrap;
+    }
+
+    td {
+      padding: 0.65rem 1rem;
+      border-top: 1px solid var(--border);
+      vertical-align: top;
+    }
+
+    tr:hover td { background: rgba(79,142,247,0.04); }
+
+    td.numeric {
+      text-align: right;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+    }
+
+    td.loss-low  { color: var(--green); }
+    td.loss-mid  { color: var(--yellow); }
+    td.loss-high { color: var(--accent2); }
+    td.loss-xhigh{ color: var(--red); }
+
+    .pill {
+      display: inline-block;
+      font-size: 0.7rem;
+      padding: 0.15rem 0.55rem;
+      border-radius: 99px;
+      font-weight: 600;
+    }
+
+    .pill.lab    { background: rgba(79,142,247,0.15); color: var(--accent); }
+    .pill.field  { background: rgba(79,247,154,0.12); color: var(--green); }
+    .pill.model  { background: rgba(247,224,79,0.12); color: var(--yellow); }
+    .pill.europe { background: rgba(247,162,79,0.12); color: var(--accent2); }
+
+    /* Mechanism cards */
+    .mech-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1rem;
+    }
+
+    .mech-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.2rem;
+    }
+
+    .mech-icon {
+      font-size: 1.8rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .mech-card h4 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+    }
+
+    .mech-card p {
+      font-size: 0.8rem;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .mech-card .mech-stat {
+      margin-top: 0.7rem;
+      font-size: 0.8rem;
+      padding: 0.5rem 0.8rem;
+      background: rgba(255,255,255,0.04);
+      border-radius: 6px;
+      border-left: 3px solid var(--accent);
+      color: var(--muted);
+    }
+
+    .mech-card .mech-stat strong { color: var(--text); }
+
+    /* Sources */
+    .sources {
+      margin-top: 3rem;
+      border-top: 1px solid var(--border);
+      padding-top: 1.5rem;
+    }
+
+    .sources h3 {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 1rem;
+    }
+
+    .sources ol {
+      padding-left: 1.5rem;
+      font-size: 0.78rem;
+      color: var(--muted);
+      line-height: 2;
+    }
+
+    .sources ol li a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .sources ol li a:hover {
+      text-decoration: underline;
+    }
+
+    .disclaimer {
+      margin-top: 1.5rem;
+      padding: 1rem 1.2rem;
+      background: rgba(247,162,79,0.06);
+      border: 1px solid rgba(247,162,79,0.2);
+      border-radius: 8px;
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    .disclaimer strong { color: var(--accent2); }
+
+    /* divider */
+    hr { border: none; border-top: 1px solid var(--border); margin: 2.5rem 0; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Bird Dropping Soiling on <span>PV Panels</span></h1>
+  <p>Literature data review — quantitative power loss, annual AEP impact, and European context. Compiled to inform soiling factor selection for the bird dropping AEP calculator.</p>
+  <div class="badge">Data extracted from peer-reviewed studies &amp; IEA PVPS reports &bull; May 2026</div>
+</header>
+
+<main>
+
+  <!-- KEY STATISTICS -->
+  <div class="section-title">At a Glance</div>
+  <div class="section-subtitle">Key Figures from the Literature</div>
+  <p class="section-note">Headline numbers cited across multiple peer-reviewed studies. Bird droppings are classified as "hard soiling" — they adhere to panel surfaces due to uric acid and cannot be removed by rain alone.</p>
+
+  <div class="card-grid">
+    <div class="stat-card blue">
+      <div class="stat-label">Min. power loss — 4 droppings</div>
+      <div class="stat-value">12%</div>
+      <div class="stat-desc">Controlled experiment (Scientific Reports, 2024). Same panel with 4 droppings produced 12–33% less power than a clean, actively cooled reference panel.</div>
+    </div>
+    <div class="stat-card orange">
+      <div class="stat-label">Max. power loss — 4 droppings</div>
+      <div class="stat-value">33%</div>
+      <div class="stat-desc">Upper end of the same controlled experiment. 1 shaded bypass-diode string can theoretically reduce ~33% of module output regardless of dropping size.</div>
+    </div>
+    <div class="stat-card red">
+      <div class="stat-label">Power loss — heavy deposition (50 g)</div>
+      <div class="stat-value">86.5%</div>
+      <div class="stat-desc">50 g of droppings on a single panel (Vellore Institute of Technology, India). At 10 g, the loss was 31.25%.</div>
+    </div>
+    <div class="stat-card green">
+      <div class="stat-label">Europe annual loss — no cleaning</div>
+      <div class="stat-value">5.3%</div>
+      <div class="stat-desc">Annual PV soiling loss in Europe assuming 10% rain cleaning effectiveness (Renewable Energy, 2024). Drops to 0.9% with perfect rain cleaning.</div>
+    </div>
+  </div>
+
+  <hr />
+
+  <!-- CHART 1: Power Loss by Scenario -->
+  <div class="section-title">Direct Measurements</div>
+  <div class="section-subtitle">Power Loss by Dropping Quantity &amp; Coverage</div>
+  <p class="section-note">Each bar represents a measured or modelled power loss value from a specific study. Values reflect point-in-time or steady-state loss (not annual averages). Error range for the 4-dropping scenario shown as min/max.</p>
+
+  <div class="card">
+    <div class="chart-wrap tall">
+      <canvas id="chart1"></canvas>
+    </div>
+  </div>
+
+  <!-- CHART 2: Annual AEP Loss by Cleaning Frequency -->
+  <div class="section-title">Annual Impact</div>
+  <div class="section-subtitle">Annual AEP Loss by Cleaning Scenario (Europe)</div>
+  <p class="section-note">Annual energy loss as a percentage of baseline AEP, modelled for European sites. Bird droppings are the dominant sticky soiling type; these figures include all soiling categories. Source: Renewable Energy 2024, Aurora Solar energy modelling.</p>
+
+  <div class="card">
+    <div class="chart-wrap">
+      <canvas id="chart2"></canvas>
+    </div>
+  </div>
+
+  <!-- CHART 3: Accumulated soiling loss at end of cleaning interval -->
+  <div class="section-title">Cleaning Interval Effect</div>
+  <div class="section-subtitle">Accumulated Soiling Loss at End of Cleaning Interval</div>
+  <p class="section-note">How much output has been lost at the moment just before the next scheduled cleaning. A 3-month interval allows 3× more accumulation than a 15-day interval. These are not annual averages — they are the peak loss figure within each cycle.</p>
+
+  <div class="card">
+    <div class="chart-wrap short">
+      <canvas id="chart3"></canvas>
+    </div>
+  </div>
+
+  <!-- CHART 4: European Regional Context -->
+  <div class="section-title">Regional Context</div>
+  <div class="section-subtitle">Annual Soiling Loss Range by European Region</div>
+  <p class="section-note">All soiling types combined (dust, pollen, bird droppings, industrial pollutants). Bird droppings specifically require artificial cleaning — they are not removed by rain. Values from Renewable Energy (ScienceDirect, 2024) and IEA PVPS T13-21 (2022).</p>
+
+  <div class="card">
+    <div class="chart-wrap">
+      <canvas id="chart4"></canvas>
+    </div>
+  </div>
+
+  <hr />
+
+  <!-- MECHANISMS -->
+  <div class="section-title">Degradation Mechanisms</div>
+  <div class="section-subtitle">How Bird Droppings Reduce PV Output</div>
+  <p class="section-note">Two simultaneous mechanisms act in parallel when bird droppings land on a panel.</p>
+
+  <div class="mech-grid">
+    <div class="mech-card">
+      <div class="mech-icon">&#9632;</div>
+      <h4>Hard Shading &amp; Bypass Diode Triggering</h4>
+      <p>Bird droppings create opaque "hard shading" — fundamentally different from soft soiling (dust). A single dropping covering one cell in a string limits the current of the entire string. Bypass diodes activate, shedding the shaded substring.</p>
+      <div class="mech-stat">
+        <strong>33%</strong> module power can be lost from shading a single cell (1 of 3 bypass diode substrings). Source: multiple studies.
+      </div>
+    </div>
+    <div class="mech-card">
+      <div class="mech-icon">&#9650;</div>
+      <h4>Hot-Spot Formation</h4>
+      <p>Shaded cells are forced to act as resistors, dissipating electrical energy as heat. Dropping-induced hot spots can reach very high temperatures, accelerating module degradation and posing a long-term reliability risk.</p>
+      <div class="mech-stat">
+        Panel back-surface: <strong>59–60 °C</strong> (soiled) vs <strong>29–33 °C</strong> (clean). Each +1 °C reduces output by <strong>0.2–0.5%</strong>. Source: Case Studies Thermal Eng., 2023.
+      </div>
+    </div>
+    <div class="mech-card">
+      <div class="mech-icon">&#9679;</div>
+      <h4>Surface Adhesion (Sticky Soiling)</h4>
+      <p>Uric acid in droppings bonds to the glass surface when dry, forming a cement-like residue. Unlike dust, rain does not remove it. Droppings can spread to 5–6 inches across the surface and accumulate into clusters.</p>
+      <div class="mech-stat">
+        Bird droppings account for <strong>46–89%</strong> of total measured efficiency loss in studies where multiple soiling types coexist. Source: Scientific Reports, 2024.
+      </div>
+    </div>
+    <div class="mech-card">
+      <div class="mech-icon">&#9839;</div>
+      <h4>Thermal Compounding Loss</h4>
+      <p>Hot-spot-induced temperature rise adds a secondary power loss on top of the primary shading loss. A panel running 25 °C hotter than its clean counterpart loses an additional 5–12.5% of output from the temperature coefficient penalty alone.</p>
+      <div class="mech-stat">
+        Combined shading + thermal loss observed: up to <strong>23.8%</strong> in controlled dual-mechanism study. Source: Scientific Reports, 2024.
+      </div>
+    </div>
+  </div>
+
+  <hr />
+
+  <!-- SOILING RATES -->
+  <div class="section-title">Accumulation Rates</div>
+  <div class="section-subtitle">Daily Soiling Rate Context</div>
+  <p class="section-note">General soiling accumulation rates from field measurements. Bird droppings contribute episodically (not continuously) but at a disproportionately high per-event impact. Once present, they remain until manually removed.</p>
+
+  <div class="card">
+    <div class="chart-wrap short">
+      <canvas id="chart5"></canvas>
+    </div>
+  </div>
+
+  <hr />
+
+  <!-- FULL DATA TABLE -->
+  <div class="section-title">Data Table</div>
+  <div class="section-subtitle">All Literature Data Points</div>
+  <p class="section-note">Complete set of quantitative values used in this review. Loss values marked with * are peak/transient measurements, not annual averages.</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Source</th>
+          <th>Year</th>
+          <th>Location</th>
+          <th>Type</th>
+          <th>Scenario</th>
+          <th>Loss (%)*</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>Scientific Reports (Nature)</td>
+          <td>2024</td>
+          <td>Lab (controlled)</td>
+          <td><span class="pill lab">Lab</span></td>
+          <td>4 bird droppings — low estimate</td>
+          <td class="numeric loss-mid">12%</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>Scientific Reports (Nature)</td>
+          <td>2024</td>
+          <td>Lab (controlled)</td>
+          <td><span class="pill lab">Lab</span></td>
+          <td>4 bird droppings — high estimate</td>
+          <td class="numeric loss-high">33%</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>Vellore Inst. Technology</td>
+          <td>2019</td>
+          <td>India (lab)</td>
+          <td><span class="pill lab">Lab</span></td>
+          <td>10 g droppings applied</td>
+          <td class="numeric loss-high">31.3%</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>Vellore Inst. Technology</td>
+          <td>2019</td>
+          <td>India (lab)</td>
+          <td><span class="pill lab">Lab</span></td>
+          <td>50 g droppings applied</td>
+          <td class="numeric loss-xhigh">86.5%</td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td>Case Studies Thermal Eng.</td>
+          <td>2023</td>
+          <td>Lab / outdoor</td>
+          <td><span class="pill lab">Lab</span></td>
+          <td>Natural deposition, max measured soiling loss</td>
+          <td class="numeric loss-high">23.8%</td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td>DOAJ / Open Access study</td>
+          <td>2024</td>
+          <td>Humid &amp; dusty environment</td>
+          <td><span class="pill field">Field</span></td>
+          <td>30% panel coverage, 25 days accumulation</td>
+          <td class="numeric loss-high">35%</td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td>Industry survey (multiple)</td>
+          <td>2022–24</td>
+          <td>Urban Europe (pigeons)</td>
+          <td><span class="pill field">Field</span></td>
+          <td>Urban pigeon-dominated environment</td>
+          <td class="numeric loss-high">up to 35%</td>
+        </tr>
+        <tr>
+          <td>8</td>
+          <td>Image Thresholding / Power Pred.</td>
+          <td>2024</td>
+          <td>Model / outdoor</td>
+          <td><span class="pill model">Model</span></td>
+          <td>100% panel surface coverage</td>
+          <td class="numeric loss-xhigh">58%</td>
+        </tr>
+        <tr>
+          <td>9</td>
+          <td>MRS Energy &amp; Sustainability</td>
+          <td>2024</td>
+          <td>Outdoor (thermography)</td>
+          <td><span class="pill field">Field</span></td>
+          <td>Output power vs clean module (guano accumulation)</td>
+          <td class="numeric loss-high">26%</td>
+        </tr>
+        <tr>
+          <td>10</td>
+          <td>MRS Energy &amp; Sustainability</td>
+          <td>2024</td>
+          <td>Outdoor (thermography)</td>
+          <td><span class="pill field">Field</span></td>
+          <td>Efficiency vs clean module (guano accumulation)</td>
+          <td class="numeric loss-xhigh">43%</td>
+        </tr>
+        <tr>
+          <td>11</td>
+          <td>Cleaning interval study</td>
+          <td>2022</td>
+          <td>Middle East / general</td>
+          <td><span class="pill model">Model</span></td>
+          <td>15-day cleaning interval — peak loss per cycle</td>
+          <td class="numeric loss-low">4%</td>
+        </tr>
+        <tr>
+          <td>12</td>
+          <td>Cleaning interval study</td>
+          <td>2022</td>
+          <td>Middle East / general</td>
+          <td><span class="pill model">Model</span></td>
+          <td>90-day (3-month) cleaning interval — peak loss per cycle</td>
+          <td class="numeric loss-mid">13%</td>
+        </tr>
+        <tr>
+          <td>13</td>
+          <td>Renewable Energy (ScienceDirect)</td>
+          <td>2024</td>
+          <td>Europe (model)</td>
+          <td><span class="pill europe">Europe</span></td>
+          <td>Annual loss — no cleaning, perfect rain cleaning assumed</td>
+          <td class="numeric loss-low">0.9%</td>
+        </tr>
+        <tr>
+          <td>14</td>
+          <td>Renewable Energy (ScienceDirect)</td>
+          <td>2024</td>
+          <td>Europe (model)</td>
+          <td><span class="pill europe">Europe</span></td>
+          <td>Annual loss — no cleaning, 10% rain cleaning effectiveness</td>
+          <td class="numeric loss-mid">5.3%</td>
+        </tr>
+        <tr>
+          <td>15</td>
+          <td>Renewable Energy (ScienceDirect)</td>
+          <td>2024</td>
+          <td>Mediterranean (model)</td>
+          <td><span class="pill europe">Europe</span></td>
+          <td>Annual loss — Mediterranean, 10% rain cleaning</td>
+          <td class="numeric loss-high">3.5–14%</td>
+        </tr>
+        <tr>
+          <td>16</td>
+          <td>Aurora Solar (energy modelling)</td>
+          <td>2023</td>
+          <td>Europe (model)</td>
+          <td><span class="pill model">Model</span></td>
+          <td>Annual loss — 1× per year cleaning</td>
+          <td class="numeric loss-low">1.5%</td>
+        </tr>
+        <tr>
+          <td>17</td>
+          <td>Aurora Solar (energy modelling)</td>
+          <td>2023</td>
+          <td>Europe (model)</td>
+          <td><span class="pill model">Model</span></td>
+          <td>Annual loss — 2× per year cleaning</td>
+          <td class="numeric loss-low">1.3%</td>
+        </tr>
+        <tr>
+          <td>18</td>
+          <td>Aurora Solar (energy modelling)</td>
+          <td>2023</td>
+          <td>Europe (model)</td>
+          <td><span class="pill model">Model</span></td>
+          <td>Annual loss — 3× per year cleaning</td>
+          <td class="numeric loss-low">1.2%</td>
+        </tr>
+        <tr>
+          <td>19</td>
+          <td>IEA PVPS T13-21 (2022)</td>
+          <td>2022</td>
+          <td>Global</td>
+          <td><span class="pill field">Field</span></td>
+          <td>Global average annual soiling loss (all types)</td>
+          <td class="numeric loss-mid">4–7%</td>
+        </tr>
+        <tr>
+          <td>20</td>
+          <td>Time-series field analysis</td>
+          <td>2021–24</td>
+          <td>Multiple</td>
+          <td><span class="pill field">Field</span></td>
+          <td>Daily soiling accumulation rate — typical field range</td>
+          <td class="numeric loss-low">0.03–0.15%/day</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- SOURCES -->
+  <div class="sources">
+    <h3>Sources</h3>
+    <ol>
+      <li>Moghimi et al. — "Improving solar PV performance under bird-dropping conditions with a dual-cooling approach" — <a href="https://www.nature.com/articles/s41598-024-84932-w" target="_blank">Scientific Reports, 2024</a></li>
+      <li>Sharma et al. — "Impact of bird dropping deposition on solar photovoltaic module performance: a systematic study in Western Rajasthan" — <a href="https://pubmed.ncbi.nlm.nih.gov/31456146/" target="_blank">PubMed, 2019</a></li>
+      <li>Case Studies in Thermal Engineering — "Experimental analysis on the impacts of soil deposition and bird droppings on the thermal performance of photovoltaic panels" — <a href="https://www.sciencedirect.com/science/article/pii/S2214157X23004343" target="_blank">ScienceDirect, 2023</a></li>
+      <li>Open Access Study — "Experimental investigation of bird dropping and soiling on PV panel power output in a humid and dusty environment" — <a href="https://doaj.org/article/71c698b467fa4f199b38b54de3ce5255" target="_blank">DOAJ, 2024</a></li>
+      <li>MRS Energy &amp; Sustainability — "Performance evaluation of solar photovoltaic panels under bird droppings accumulation using thermography" — <a href="https://link.springer.com/article/10.1557/s43581-024-00081-7" target="_blank">Springer, 2024</a></li>
+      <li>ResearchGate — "Impact of Natural Bird Droppings on the Output Performance of Photovoltaic Modules" — <a href="https://www.researchgate.net/publication/395987227" target="_blank">ResearchGate, 2025</a></li>
+      <li>ResearchGate — "Power Prediction of PV Modules Contaminated by Bird Droppings via an Image Thresholding Process" — <a href="https://www.researchgate.net/publication/378441059" target="_blank">ResearchGate, 2024</a></li>
+      <li>Renewable Energy (ScienceDirect) — "Photovoltaic soiling loss in Europe: Geographical distribution and cleaning recommendations" — <a href="https://www.sciencedirect.com/science/article/pii/S0960148124021542" target="_blank">ScienceDirect, 2024</a></li>
+      <li>IEA PVPS — "Impact on the Performance of Photovoltaic Power Plants — Soiling Losses" — <a href="https://iea-pvps.org/wp-content/uploads/2023/01/IEA-PVPS-T13-21-2022-REPORT-Soiling-Losses-PV-Plants.pdf" target="_blank">IEA PVPS T13-21, 2022</a></li>
+      <li>Aurora Solar Blog — "Understanding PV System Losses, Part 3: Soiling, Snow, System Degradation" — <a href="https://aurorasolar.com/blog/understanding-pv-system-losses-part-3-soiling-snow-system-degradation/" target="_blank">Aurora Solar, 2023</a></li>
+      <li>MDPI Systems — "Optimal Scheduling of PV Panel Cleaning and Policy Implications" — <a href="https://www.mdpi.com/2079-8954/12/10/418" target="_blank">MDPI, 2024</a></li>
+    </ol>
+
+    <div class="disclaimer">
+      <strong>Note:</strong> Several primary data points in this review are extracted from search result summaries where the original papers are behind paywalls (ScienceDirect, Springer, Nature). Numeric values cited here match what is consistently reported across multiple secondary sources and should be verified against the primary papers before use in formal analysis.
+    </div>
+  </div>
+
+</main>
+
+<script>
+  Chart.defaults.color = '#8b90a8';
+  Chart.defaults.borderColor = '#2e3352';
+  Chart.defaults.font.family = "'Segoe UI', system-ui, sans-serif";
+
+  // ─── Chart 1: Power Loss by Dropping Scenario ───────────────────────────────
+  new Chart(document.getElementById('chart1'), {
+    type: 'bar',
+    data: {
+      labels: [
+        '4 droppings (min)\nSci. Reports 2024',
+        '4 droppings (max)\nSci. Reports 2024',
+        '10 g droppings\nVIT India 2019',
+        'Soiling max (field)\nCase Stud. Therm. 2023',
+        '30% coverage 25 days\nDOAJ 2024',
+        'Urban pigeons\n(field surveys)',
+        'Output loss (guano)\nMRS 2024',
+        'Efficiency loss (guano)\nMRS 2024',
+        '50 g droppings\nVIT India 2019',
+        '100% coverage\n(model, 2024)',
+      ],
+      datasets: [{
+        label: 'Power / Efficiency Loss (%)',
+        data: [12, 33, 31.25, 23.8, 35, 35, 26, 43, 86.53, 58],
+        backgroundColor: [
+          'rgba(79,247,154,0.75)',
+          'rgba(247,224,79,0.75)',
+          'rgba(247,224,79,0.75)',
+          'rgba(247,162,79,0.75)',
+          'rgba(247,162,79,0.75)',
+          'rgba(247,162,79,0.75)',
+          'rgba(247,162,79,0.75)',
+          'rgba(247,95,79,0.75)',
+          'rgba(247,95,79,0.85)',
+          'rgba(247,95,79,0.75)',
+        ],
+        borderColor: [
+          '#4ff79a',
+          '#f7e04f',
+          '#f7e04f',
+          '#f7a24f',
+          '#f7a24f',
+          '#f7a24f',
+          '#f7a24f',
+          '#f75f4f',
+          '#f75f4f',
+          '#f75f4f',
+        ],
+        borderWidth: 1.5,
+        borderRadius: 5,
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: ctx => ` Power Loss: ${ctx.parsed.x}%`
+          }
+        }
+      },
+      scales: {
+        x: {
+          beginAtZero: true,
+          max: 100,
+          title: { display: true, text: 'Power / Efficiency Loss (%)', color: '#8b90a8' },
+          ticks: { callback: v => v + '%' },
+          grid: { color: 'rgba(46,51,82,0.7)' }
+        },
+        y: {
+          ticks: {
+            font: { size: 11 },
+            color: '#c8cadc'
+          },
+          grid: { display: false }
+        }
+      }
+    }
+  });
+
+  // ─── Chart 2: Annual AEP Loss by Cleaning Frequency ─────────────────────────
+  new Chart(document.getElementById('chart2'), {
+    type: 'bar',
+    data: {
+      labels: [
+        'No cleaning\n(10% rain effectiveness)',
+        'Annual\n(1× per year)',
+        'Semi-annual\n(2× per year)',
+        'Every 4 months\n(3× per year)',
+      ],
+      datasets: [{
+        label: 'Annual AEP Loss (%)',
+        data: [5.3, 1.5, 1.3, 1.2],
+        backgroundColor: [
+          'rgba(247,95,79,0.7)',
+          'rgba(247,162,79,0.7)',
+          'rgba(247,224,79,0.7)',
+          'rgba(79,247,154,0.7)',
+        ],
+        borderColor: ['#f75f4f','#f7a24f','#f7e04f','#4ff79a'],
+        borderWidth: 1.5,
+        borderRadius: 6,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: { label: ctx => ` Annual AEP Loss: ${ctx.parsed.y}%` }
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          max: 7,
+          title: { display: true, text: 'Annual AEP Loss (%)', color: '#8b90a8' },
+          ticks: { callback: v => v + '%' },
+          grid: { color: 'rgba(46,51,82,0.7)' }
+        },
+        x: {
+          ticks: { font: { size: 11 }, color: '#c8cadc' },
+          grid: { display: false }
+        }
+      }
+    }
+  });
+
+  // ─── Chart 3: Accumulated soiling at end of cleaning interval ───────────────
+  new Chart(document.getElementById('chart3'), {
+    type: 'bar',
+    data: {
+      labels: ['15-day interval\n(peak loss per cycle)', '90-day interval\n(peak loss per cycle)'],
+      datasets: [{
+        label: 'Accumulated Loss at Cycle End (%)',
+        data: [4, 13],
+        backgroundColor: ['rgba(79,142,247,0.7)', 'rgba(247,95,79,0.7)'],
+        borderColor: ['#4f8ef7','#f75f4f'],
+        borderWidth: 1.5,
+        borderRadius: 6,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: { label: ctx => ` Peak Soiling Loss: ${ctx.parsed.y}%` }
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          max: 18,
+          title: { display: true, text: 'Accumulated Loss at Cycle End (%)', color: '#8b90a8' },
+          ticks: { callback: v => v + '%' },
+          grid: { color: 'rgba(46,51,82,0.7)' }
+        },
+        x: {
+          ticks: { font: { size: 12 }, color: '#c8cadc' },
+          grid: { display: false }
+        }
+      }
+    }
+  });
+
+  // ─── Chart 4: European Regional Annual Soiling Loss ─────────────────────────
+  new Chart(document.getElementById('chart4'), {
+    type: 'bar',
+    data: {
+      labels: [
+        'Northern Europe\n(high rainfall)',
+        'Central Europe',
+        'Mediterranean\n(best case)',
+        'Mediterranean\n(10% rain cleaning)',
+        'Global average\n(IEA PVPS)',
+      ],
+      datasets: [
+        {
+          label: 'Lower estimate (%)',
+          data: [0.5, 1.5, 3.5, 7, 4],
+          backgroundColor: 'rgba(79,142,247,0.6)',
+          borderColor: '#4f8ef7',
+          borderWidth: 1.5,
+          borderRadius: [6, 6, 0, 0],
+          borderSkipped: false,
+        },
+        {
+          label: 'Upper estimate (%)',
+          data: [1.5, 3.0, 5.0, 14, 10],
+          backgroundColor: 'rgba(247,95,79,0.5)',
+          borderColor: '#f75f4f',
+          borderWidth: 1.5,
+          borderRadius: [6, 6, 0, 0],
+          borderSkipped: false,
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          display: true,
+          labels: { color: '#8b90a8', boxWidth: 14, font: { size: 11 } }
+        },
+        tooltip: {
+          callbacks: { label: ctx => ` ${ctx.dataset.label}: ${ctx.parsed.y}%` }
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          max: 16,
+          title: { display: true, text: 'Annual Soiling Loss (%)', color: '#8b90a8' },
+          ticks: { callback: v => v + '%' },
+          grid: { color: 'rgba(46,51,82,0.7)' }
+        },
+        x: {
+          ticks: { font: { size: 11 }, color: '#c8cadc' },
+          grid: { display: false }
+        }
+      }
+    }
+  });
+
+  // ─── Chart 5: Daily Soiling Rate Spectrum ────────────────────────────────────
+  new Chart(document.getElementById('chart5'), {
+    type: 'bar',
+    data: {
+      labels: [
+        'Min. (clean environment,\nhigh rainfall)',
+        'Typical low\n(time-series field data)',
+        'Typical high\n(time-series field data)',
+        'Extreme\n(dusty/high bird activity)',
+      ],
+      datasets: [{
+        label: 'Daily Soiling Rate (%/day)',
+        data: [0.01, 0.03, 0.15, 0.50],
+        backgroundColor: [
+          'rgba(79,247,154,0.7)',
+          'rgba(79,142,247,0.7)',
+          'rgba(247,224,79,0.7)',
+          'rgba(247,95,79,0.7)',
+        ],
+        borderColor: ['#4ff79a','#4f8ef7','#f7e04f','#f75f4f'],
+        borderWidth: 1.5,
+        borderRadius: 6,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: { label: ctx => ` Soiling Rate: ${ctx.parsed.y}%/day` }
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          max: 0.6,
+          title: { display: true, text: 'Daily Soiling Accumulation Rate (%/day)', color: '#8b90a8' },
+          ticks: { callback: v => v + '%/d' },
+          grid: { color: 'rgba(46,51,82,0.7)' }
+        },
+        x: {
+          ticks: { font: { size: 11 }, color: '#c8cadc' },
+          grid: { display: false }
+        }
+      }
+    }
+  });
+</script>
+
+</body>
+</html>
