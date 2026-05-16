@@ -407,6 +407,71 @@
 
   <hr />
 
+  <!-- CAVEATS -->
+  <div class="section-title">Interpreting the Data</div>
+  <div class="section-subtitle">Why European Figures Understate Bird Dropping Impact</div>
+  <p class="section-note">The 0.9–5.3% annual soiling loss figures for Europe look reassuringly small — but they are methodologically ill-suited for estimating bird-dropping-specific losses. Six reasons to treat them with caution.</p>
+
+  <div class="mech-grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
+
+    <div class="mech-card">
+      <div class="mech-icon">&#128200;</div>
+      <h4>European figures aggregate all soiling types</h4>
+      <p>The 0.9–5.3% annual loss values cover <em>all</em> soiling combined: dust, pollen, industrial particulates, and bird droppings. They are not bird-dropping-specific figures. Bird droppings are only one component of the total, and their individual contribution within that aggregate is not separated out in most European studies.</p>
+      <div class="mech-stat">
+        <strong>What these numbers actually measure:</strong> total irradiance attenuation from all deposited matter — not bird soiling alone.
+      </div>
+    </div>
+
+    <div class="mech-card">
+      <div class="mech-icon">&#127783;</div>
+      <h4>Rain-based models systematically miss bird soiling</h4>
+      <p>Standard European soiling models treat rainfall as the primary cleaning mechanism. Rain effectively removes dust and pollen, but it does <em>not</em> remove bird droppings — uric acid in droppings bonds chemically to glass on drying, forming a cement-like deposit that persists until manually cleaned. Models calibrated with rain-effectiveness assumptions therefore structurally undercount the hard-soiling component.</p>
+      <div class="mech-stat">
+        Bird droppings are classified as <strong>hard soiling</strong>. Only artificial cleaning removes them. Rain-based models treat them the same as dust — an incorrect assumption.
+      </div>
+    </div>
+
+    <div class="mech-card">
+      <div class="mech-icon">&#128038;</div>
+      <h4>European bird populations are not smaller</h4>
+      <p>The key fouling species — rock pigeons, European starlings, herring and black-headed gulls, jackdaws, and rooks — are abundant across Europe, particularly in urban, coastal, and agricultural settings where solar farms are increasingly installed. The UK alone has approximately 100 million breeding birds. There is no biological basis for assuming lower bird-dropping exposure in Europe compared to regions where the controlled studies were conducted.</p>
+      <div class="mech-stat">
+        Rock pigeons: ~28 million pairs in Europe. European starlings: ~60 million pairs. Herring gulls: significant coastal populations across NW Europe.
+      </div>
+    </div>
+
+    <div class="mech-card">
+      <div class="mech-icon">&#127758;</div>
+      <h4>Study geographic bias creates a data gap</h4>
+      <p>The vast majority of controlled bird-dropping PV experiments were conducted in India, the UAE, and North Africa — regions with concentrated solar investment and research funding. Peer-reviewed European field data specifically isolating bird-dropping losses is scarce. The apparent "small effect in Europe" largely reflects a <em>lack of measurement</em> rather than a lack of impact. Absence of evidence is not evidence of absence.</p>
+      <div class="mech-stat">
+        Of the 11 primary studies in this review, <strong>zero</strong> are European field studies isolating bird-dropping losses specifically. All European figures come from aggregated soiling models.
+      </div>
+    </div>
+
+    <div class="mech-card">
+      <div class="mech-icon">&#128268;</div>
+      <h4>Soiling sensors don't capture bypass-diode losses</h4>
+      <p>Standard soiling sensors and IV-curve tracers are designed to measure gradual, spatially uniform irradiance attenuation — the dust model. Bird droppings create non-uniform hard shading that triggers bypass diodes, producing stepped, disproportionate power losses. This mechanism is largely invisible to standard monitoring equipment, so it tends to be misclassified as "unexplained performance loss" rather than attributed to bird soiling.</p>
+      <div class="mech-stat">
+        A single dropping covering one cell can trigger a bypass diode and remove <strong>~33% of module output</strong> — this shows up as an electrical anomaly, not a soiling event, in standard monitoring.
+      </div>
+    </div>
+
+    <div class="mech-card">
+      <div class="mech-icon">&#128205;</div>
+      <h4>National averages mask extreme site-level variation</h4>
+      <p>Soiling from bird droppings is highly site-specific, driven by proximity to roost sites, water bodies, power lines, and urban areas. A solar farm near a gull colony or a city-centre pigeon population may experience 5–15× the annual loss of a rural site with sparse bird activity. National or regional averages — even when accurate for their scope — are poor predictors of individual site performance and can create dangerous false confidence for site operators in high-exposure locations.</p>
+      <div class="mech-stat">
+        Urban/coastal sites with heavy pigeon or gull activity: up to <strong>35% instantaneous power loss</strong> documented in field surveys. Rural sites: often &lt;2%.
+      </div>
+    </div>
+
+  </div>
+
+  <hr />
+
   <!-- MECHANISMS -->
   <div class="section-title">Degradation Mechanisms</div>
   <div class="section-subtitle">How Bird Droppings Reduce PV Output</div>
