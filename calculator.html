@@ -660,6 +660,11 @@
   let activePreset = 'medium';
   let chartLoss = null, chartAEP = null;
 
+  // Prevent scroll wheel from changing number inputs
+  document.querySelectorAll('input[type="number"]').forEach(el =>
+    el.addEventListener('wheel', e => e.preventDefault(), { passive: false })
+  );
+
   // Build scenario checkboxes
   const scenarioList = document.getElementById('scenarioList');
   SCENARIOS.forEach(s => {
