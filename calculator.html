@@ -211,20 +211,18 @@
     .preset-btn[data-level="veryhigh"].active { border-color: var(--red); background: rgba(247,95,79,0.06); }
     .preset-btn[data-level="custom"].active { border-color: var(--accent); background: rgba(79,142,247,0.08); }
 
-    .preset-btn { position: relative; }
-    .preset-btn.active::after {
-      content: '✓';
-      position: absolute;
-      top: 0.45rem;
-      right: 0.6rem;
-      font-size: 0.75rem;
-      font-weight: 700;
-      color: var(--accent);
+    .p-label::before {
+      content: '☐';
+      margin-right: 0.35rem;
+      font-size: 0.95rem;
+      color: var(--muted);
+      vertical-align: middle;
     }
-    .preset-btn[data-level="low"].active::after    { color: var(--green); }
-    .preset-btn[data-level="medium"].active::after { color: var(--yellow); }
-    .preset-btn[data-level="high"].active::after   { color: var(--accent2); }
-    .preset-btn[data-level="veryhigh"].active::after { color: var(--red); }
+    .preset-btn.active .p-label::before                { content: '☑'; color: var(--accent); }
+    .preset-btn[data-level="low"].active .p-label::before    { color: var(--green); }
+    .preset-btn[data-level="medium"].active .p-label::before { color: var(--yellow); }
+    .preset-btn[data-level="high"].active .p-label::before   { color: var(--accent2); }
+    .preset-btn[data-level="veryhigh"].active .p-label::before { color: var(--red); }
 
     .preset-desc {
       font-size: 0.77rem;
@@ -516,22 +514,22 @@
 
       <div class="presets">
         <button class="preset-btn" data-level="low">
-          <span class="p-label">&#9632; Low</span>
+          <span class="p-label">Low</span>
           <span class="p-rate">0.015 %/day</span>
           <span class="p-example">Rural, sparse birds</span>
         </button>
         <button class="preset-btn active" data-level="medium">
-          <span class="p-label">&#9632; Medium</span>
+          <span class="p-label">Medium</span>
           <span class="p-rate">0.04 %/day</span>
           <span class="p-example">Suburban, starlings/sparrows</span>
         </button>
         <button class="preset-btn" data-level="high">
-          <span class="p-label">&#9632; High</span>
+          <span class="p-label">High</span>
           <span class="p-rate">0.10 %/day</span>
           <span class="p-example">Urban/coastal, pigeons/gulls</span>
         </button>
         <button class="preset-btn" data-level="veryhigh">
-          <span class="p-label">&#9632; Very High</span>
+          <span class="p-label">Very High</span>
           <span class="p-rate">0.20 %/day</span>
           <span class="p-example">Near roost colony</span>
         </button>
