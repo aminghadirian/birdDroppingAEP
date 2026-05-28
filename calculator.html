@@ -402,11 +402,8 @@
 
     /* ── Manual AEP fallback ── */
     .manual-aep-wrap {
-      display: none;
       margin-top: 0.8rem;
     }
-
-    .manual-aep-wrap.visible { display: block; }
 
     /* ── Scrolling hint on mobile ── */
     .scroll-hint {
@@ -546,7 +543,7 @@
     <!-- Manual AEP fallback -->
     <div class="manual-aep-wrap" id="manualWrap">
       <div class="card">
-        <div class="card-title">Manual Baseline AEP (if PVGIS is unavailable)</div>
+        <div class="card-title">Or enter baseline AEP manually</div>
         <div class="field">
           <label>Your known annual AEP <span class="unit">(kWh/yr)</span></label>
           <input type="number" id="manualAEP" placeholder="e.g. 1200000" min="1" step="1000" />
@@ -706,6 +703,8 @@
 
     try {
       const annualKwh = await fetchPVGIS(lat, lon, kWp, tilt, azimuth);
+      if (!isFinite(annualKwh) || annualKwh <= 0)
+        throw new Error('PVGIS returned an unexpected response. Check that your coordinates are within the supported region (Europe and nearby).');
       renderResults(annualKwh, 'pvgis', { lat, lon, kWp, tilt, azimuth });
     } catch (err) {
       showError(err.message);
@@ -731,9 +730,8 @@
         <strong>Could not reach PVGIS API</strong>
         ${msg}<br /><br />
         PVGIS is a public EU Commission API — if you're offline or it's temporarily unavailable,
-        you can enter your known annual AEP manually below the calculate button.
+        use the manual AEP input below the calculate button instead.
       </div>`;
-    document.getElementById('manualWrap').classList.add('visible');
   }
 
   // ─── Render results ───────────────────────────────────────────────────────────
