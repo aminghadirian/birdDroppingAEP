@@ -621,10 +621,21 @@
       aspect: azimuth,
       outputformat: 'json',
     });
-    const res = await fetch(`https://re.jrc.ec.europa.eu/api/v5_2/PVcalc?${params}`);
+    const pvgisUrl = `https://re.jrc.ec.europa.eu/api/v5_2/PVcalc?${params}`;
+
+    let res;
+    try {
+      // Direct request — works if PVGIS sends CORS headers for this origin
+      res = await fetch(pvgisUrl);
+    } catch {
+      // Browser blocked the direct request (CORS). Retry via a transparent proxy.
+      res = await fetch('https://corsproxy.io/?' + encodeURIComponent(pvgisUrl));
+    }
+
     if (!res.ok) throw new Error(`PVGIS returned ${res.status}`);
     const json = await res.json();
-    return +json.outputs.totals.fixed.E_y; // annual kWh
+    const E_y = json?.outputs?.totals?.fixed?.E_y;
+    return +E_y;
   }
 
   // ─── DOM setup ───────────────────────────────────────────────────────────────
