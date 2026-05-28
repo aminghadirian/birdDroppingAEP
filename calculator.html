@@ -211,6 +211,21 @@
     .preset-btn[data-level="veryhigh"].active { border-color: var(--red); background: rgba(247,95,79,0.06); }
     .preset-btn[data-level="custom"].active { border-color: var(--accent); background: rgba(79,142,247,0.08); }
 
+    .preset-btn { position: relative; }
+    .preset-btn.active::after {
+      content: '✓';
+      position: absolute;
+      top: 0.45rem;
+      right: 0.6rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+    .preset-btn[data-level="low"].active::after    { color: var(--green); }
+    .preset-btn[data-level="medium"].active::after { color: var(--yellow); }
+    .preset-btn[data-level="high"].active::after   { color: var(--accent2); }
+    .preset-btn[data-level="veryhigh"].active::after { color: var(--red); }
+
     .preset-desc {
       font-size: 0.77rem;
       color: var(--muted);
@@ -727,7 +742,8 @@
 
   // ─── UI helpers ──────────────────────────────────────────────────────────────
   function showLoading() {
-    document.getElementById('placeholder').style.display = 'none';
+    const placeholder = document.getElementById('placeholder');
+    if (placeholder) placeholder.style.display = 'none';
     document.getElementById('resultsPanel').innerHTML = `
       <div class="loading-state">
         <div class="spinner"></div>
